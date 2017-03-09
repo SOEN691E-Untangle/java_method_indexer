@@ -2,6 +2,9 @@ group 'com.soen691e.untangle'
 version '0.0.1'
 
 apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'com.soen691e.untangle.JavaMethodIndexer'
 
 repositories {
     mavenCentral()

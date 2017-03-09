@@ -42,10 +42,9 @@ public class JavaMethodIndexer {
                 .map(Path::toFile)
                 .forEach(file -> {
                     try {
+                        CompilationUnit compilationUnit = JavaParser.parse(file);
                         jsonGenerator.writeFieldName(file.getName());
                         jsonGenerator.writeStartArray();
-                        CompilationUnit compilationUnit = JavaParser.parse(file);
-
                         compilationUnit.getNodesByType(MethodDeclaration.class)
                                 .forEach(methodDeclaration -> {
                                     try {
@@ -72,8 +71,8 @@ public class JavaMethodIndexer {
                                     }
                                 });
                         jsonGenerator.writeEndArray();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    } catch (Exception e) {
+//                        System.out.println("Problem parsing file: " + file);
                     }
                 });
         jsonGenerator.writeEndObject();
