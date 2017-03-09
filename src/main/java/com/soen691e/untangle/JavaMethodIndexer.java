@@ -44,33 +44,29 @@ public class JavaMethodIndexer {
                     try {
                         CompilationUnit compilationUnit = JavaParser.parse(file);
                         jsonGenerator.writeFieldName(file.getCanonicalPath());
-                        jsonGenerator.writeStartArray();
+                        jsonGenerator.writeStartObject();
                         compilationUnit.getNodesByType(MethodDeclaration.class)
                                 .forEach(methodDeclaration -> {
                                     try {
-                                        jsonGenerator.writeStartObject();
-                                        jsonGenerator.writeStringField("methodName", methodDeclaration.getName().getIdentifier());
+                                        StringBuilder key = new StringBuilder();
+                                        String methodName = methodDeclaration.getName().getIdentifier();
+
                                         methodDeclaration.getBegin().ifPresent(x -> {
-                                            try {
-                                                jsonGenerator.writeNumberField("startLine", x.line);
-                                            } catch (IOException e) {
-                                                e.printStackTrace();
-                                            }
-                                        });
-                                        methodDeclaration.getEnd().ifPresent(x -> {
-                                            try {
-                                                jsonGenerator.writeNumberField("endLine", x.line);
-                                            } catch (IOException e) {
-                                                e.printStackTrace();
-                                            }
+                                            key.append(x.line);
                                         });
 
-                                        jsonGenerator.writeEndObject();
+                                        key.append("-");
+
+                                        methodDeclaration.getEnd().ifPresent(x -> {
+                                            key.append(x.line);
+                                        });
+
+                                        jsonGenerator.writeStringField(key.toString(), methodName);
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
                                 });
-                        jsonGenerator.writeEndArray();
+                        jsonGenerator.writeEndObject();
                     } catch (Exception e) {
 //                        System.out.println("Problem parsing file: " + file);
                     }
