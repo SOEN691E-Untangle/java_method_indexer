@@ -43,7 +43,7 @@ public class JavaMethodIndexer {
                 .forEach(file -> {
                     try {
                         CompilationUnit compilationUnit = JavaParser.parse(file);
-                        jsonGenerator.writeFieldName(file.getName());
+                        jsonGenerator.writeFieldName(file.getPath());
                         jsonGenerator.writeStartArray();
                         compilationUnit.getNodesByType(MethodDeclaration.class)
                                 .forEach(methodDeclaration -> {
