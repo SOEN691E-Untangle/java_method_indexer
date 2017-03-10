@@ -75,7 +75,7 @@ public class JavaMethodIndexer {
                                 });
                         jsonGenerator.writeEndObject();
                     } catch (Exception e) {
-                        System.out.println("Problem parsing file: " + file);
+//                        System.out.println("Problem parsing file: " + file);
                     }
                 });
         jsonGenerator.writeEndObject();
