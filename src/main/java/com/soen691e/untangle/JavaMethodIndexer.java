@@ -12,6 +12,7 @@ import org.apache.commons.cli.*;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.file.*;
+import java.util.List;
 
 /**
  * Produces an index of the methods and the lines they cover in a java project.
@@ -51,7 +52,8 @@ public class JavaMethodIndexer {
                         compilationUnit.getNodesByType(MethodDeclaration.class)
                                 .forEach(methodDeclaration -> {
                                     try {
-                                        String packageName = compilationUnit.getNodesByType(PackageDeclaration.class).get(0).getNameAsString();
+                                        List<PackageDeclaration> packageDeclarations = compilationUnit.getNodesByType(PackageDeclaration.class);
+                                        String packageName = !packageDeclarations.isEmpty() ? packageDeclarations.get(0).getNameAsString() : "";
                                         String className = compilationUnit.getNodesByType(ClassOrInterfaceDeclaration.class).get(0).getNameAsString();
                                         StringBuilder key = new StringBuilder();
                                         String methodName = methodDeclaration.getName().getIdentifier();
@@ -73,7 +75,7 @@ public class JavaMethodIndexer {
                                 });
                         jsonGenerator.writeEndObject();
                     } catch (Exception e) {
-//                        System.out.println("Problem parsing file: " + file);
+                        System.out.println("Problem parsing file: " + file);
                     }
                 });
         jsonGenerator.writeEndObject();
