@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import org.apache.commons.cli.*;
 
@@ -51,6 +52,7 @@ public class JavaMethodIndexer {
                                 .forEach(methodDeclaration -> {
                                     try {
                                         String packageName = compilationUnit.getNodesByType(PackageDeclaration.class).get(0).getNameAsString();
+                                        String className = compilationUnit.getNodesByType(ClassOrInterfaceDeclaration.class).get(0).getNameAsString();
                                         StringBuilder key = new StringBuilder();
                                         String methodName = methodDeclaration.getName().getIdentifier();
 
@@ -64,7 +66,7 @@ public class JavaMethodIndexer {
                                             key.append(x.line);
                                         });
 
-                                        jsonGenerator.writeStringField(key.toString(), packageName + '.' + methodName);
+                                        jsonGenerator.writeStringField(key.toString(), packageName + "." + className + "." + methodName);
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
